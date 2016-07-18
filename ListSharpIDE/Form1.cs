@@ -17,6 +17,7 @@ namespace ListSharpIDE
 {
     public partial class Form1 : Form
     {
+        //initial
         Color listSharpC = Color.FromArgb(1, 0, 125, 125);
         Boolean saved = true;
         Regex _regex;
