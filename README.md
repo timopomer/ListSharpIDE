@@ -9,3 +9,19 @@ This IDE is meant to be a convinient enviroment for the development of [ListShar
 ### Example working enviroment screenshot
 
 ![Beta](http://puu.sh/q5Ux3/f09d4e61a9.png)
+
+## ListSharpIDE - Teal Specifications
+
+### Currently featuring
+
+* Code highlighting
+* Abillity to quickly run code from the IDE
+* Embedded Wiki documentation for all ListSharp commands
+
+### To be finished in the Teal version
+
+* Improved custom code highlighting
+* Code completion
+* Code snipplets
+* Version control for different ListSharp builds
+* Debugging helper
