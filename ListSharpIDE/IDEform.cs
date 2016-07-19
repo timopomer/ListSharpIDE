@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -29,7 +30,6 @@ namespace ListSharpIDE
         public IDEform()
         {
             InitializeComponent();
-
         }
 
         public void loadFile()
@@ -42,22 +42,25 @@ namespace ListSharpIDE
 
         private void Form1_Load(object sender, EventArgs e)
         {
-             scintilla1.Height = 700 - 220;
+            scintilla1.Height = 700 - 220;
             label3.Height = 700 - 220;
             richTextBox1.Width = 1000;
             scintilla1.Width = 947;
             richTextBox1.Text = "interesting";
-            richTextBox1.Location =new Point(0,40 + 700 - 220);
+            richTextBox1.Location = new Point(0,40 + 700 - 220);
             pictureBox4.Location = new Point(1000-100-27, 7);
             scintilla1.Margins[1].Width = 0;
             scintilla1.Styles[Style.Default].BackColor = Color.FromArgb(1, 0, 125, 125); ;
             scintilla1.Styles[Style.Default].ForeColor = Color.FromArgb(236, 240, 241);
             scintilla1.CaretForeColor = Color.FromArgb(1, 247, 247, 247);
             scintilla1.StyleClearAll();
+            loadFile();
+            
         }
 
         private void scintilla1_TextChanged(object sender, EventArgs e)
         {
+            saved = false;
             updateInfo();
         }
         private void scintilla1_KeyDown(object sender, KeyEventArgs e)
@@ -115,9 +118,6 @@ namespace ListSharpIDE
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-
-
-
             scintilla1.Lexer = Lexer.Null;
             scintilla1.Styles[Style.Cpp.Default].ForeColor = Color.FromArgb(204, 204, 255);
             scintilla1.Styles[Style.Cpp.Comment].ForeColor = Color.FromArgb(5, 30, 86);
@@ -126,16 +126,14 @@ namespace ListSharpIDE
             scintilla1.Styles[Style.Cpp.Number].ForeColor = Color.Yellow;
 
 
-
-
             scintilla1.Styles[Style.Cpp.String].ForeColor = Color.FromArgb(241, 196, 15);
             scintilla1.Styles[Style.Cpp.Character].ForeColor = Color.FromArgb(241, 196, 15);
             scintilla1.Styles[Style.Cpp.Verbatim].ForeColor = Color.FromArgb(241, 196, 15);
             scintilla1.Styles[Style.Cpp.StringEol].BackColor = Color.Black;
             scintilla1.Styles[Style.Cpp.Operator].ForeColor = Color.FromArgb(102, 255, 51);
             scintilla1.Styles[Style.Cpp.Preprocessor].ForeColor = Color.Maroon;
-            scintilla1.SetKeywords(0, "STRG ROWS TO SPLIT BY FROM IN WITH SHOW OUTP AS");
-            //scintilla1.SetKeywords(1, allVars);
+            scintilla1.SetKeywords(0, Completion.connectorsString());
+            scintilla1.SetKeywords(1, Completion.commandString());
 
             scintilla1.Styles[Style.Cpp.Word].ForeColor = Color.FromArgb(0, 61, 153);
             scintilla1.Styles[Style.Cpp.Word2].ForeColor = Color.FromArgb(153, 0, 61);
@@ -144,18 +142,19 @@ namespace ListSharpIDE
 
             // Set the keywords
 
-
-
+            updateLineNums();
+        }
+        public void updateLineNums()
+        {
             string linesNumbs = "";
-            for (int i = 0; i<100; i++)
-                linesNumbs+=(scintilla1.FirstVisibleLine+i)+Environment.NewLine;
+            for (int i = 0; i < 100; i++)
+                linesNumbs += (scintilla1.FirstVisibleLine + i) + Environment.NewLine;
 
             label3.Text = linesNumbs;
         }
-
         private void scintilla1_CharAdded(object sender, CharAddedEventArgs e)
         {
-            saved = false;
+            
         }
 
 
@@ -174,7 +173,7 @@ namespace ListSharpIDE
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             saved = true;
-            //File.WriteAllText(filename,scintilla1.Text);
+            File.WriteAllText(workingEnviroment.activeFilePath,scintilla1.Text);
             var showr = new showtext();
             showr.Show();
         }
@@ -186,7 +185,7 @@ namespace ListSharpIDE
                 MessageBox.Show("You have to save the script to run it");
                 return;
             }
-            //System.Diagnostics.Process.Start(filename);
+            Process.Start(workingEnviroment.activeFilePath);
 
         }
 
@@ -196,5 +195,9 @@ namespace ListSharpIDE
 
         }
 
+        private void IDEform_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

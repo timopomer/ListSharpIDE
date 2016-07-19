@@ -138,7 +138,7 @@
             this.richTextBox1.TabIndex = 9;
             this.richTextBox1.Text = "";
             // 
-            // Form1
+            // IDEform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -152,8 +152,9 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.scintilla1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "IDEform";
             this.Text = "ListSharp IDE";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.IDEform_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

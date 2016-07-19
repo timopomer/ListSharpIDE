@@ -35,10 +35,8 @@ namespace ListSharpIDE
                 MessageBox.Show("You have to choose a file");
                 return;
             }
-            //IDEform.filename = filename;
-
+            workingEnviroment.activeFilePath = filename;
             this.Close();
-
         }
 
 

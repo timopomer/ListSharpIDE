@@ -20,15 +20,13 @@ namespace ListSharpIDE
             Initialize.readWiki();
             launchedDirectly();
         }
-
+        IDEform IDEform = new IDEform();
         private void welcomeForm_Load(object sender, EventArgs e)
         {
             if (workingEnviroment.activeFilePath!="")
             {
                 this.Opacity = 0;
-                this.Hide();
-                IDEform IDEform = new IDEform();
-                IDEform.Show();
+                showIDE();
             }
         }
 
@@ -51,12 +49,19 @@ namespace ListSharpIDE
         {
             openfile openfile = new openfile();
             openfile.ShowDialog();
+            if (workingEnviroment.activeFilePath != "")
+                showIDE();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             settingsForm settingsForm = new settingsForm();
             settingsForm.ShowDialog();
+        }
+        public void showIDE()
+        {
+            this.Hide();
+            IDEform.Show();
         }
 
 
