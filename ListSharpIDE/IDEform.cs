@@ -39,9 +39,9 @@ namespace ListSharpIDE
         }
 
 
-
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             scintilla1.Height = 700 - 220;
             label3.Height = 700 - 220;
             richTextBox1.Width = 1000;
@@ -50,12 +50,11 @@ namespace ListSharpIDE
             richTextBox1.Location = new Point(0,40 + 700 - 220);
             pictureBox4.Location = new Point(1000-100-27, 7);
             scintilla1.Margins[1].Width = 0;
-            scintilla1.Styles[Style.Default].BackColor = Color.FromArgb(1, 0, 125, 125); ;
-            scintilla1.Styles[Style.Default].ForeColor = Color.FromArgb(236, 240, 241);
-            scintilla1.CaretForeColor = Color.FromArgb(1, 247, 247, 247);
+            
             scintilla1.StyleClearAll();
             loadFile();
             
+
         }
 
         private void scintilla1_TextChanged(object sender, EventArgs e)
@@ -63,6 +62,7 @@ namespace ListSharpIDE
             saved = false;
             updateInfo();
         }
+
         private void scintilla1_KeyDown(object sender, KeyEventArgs e)
         {
             updateInfo();
@@ -118,29 +118,43 @@ namespace ListSharpIDE
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            scintilla1.Lexer = Lexer.Null;
-            scintilla1.Styles[Style.Cpp.Default].ForeColor = Color.FromArgb(204, 204, 255);
-            scintilla1.Styles[Style.Cpp.Comment].ForeColor = Color.FromArgb(5, 30, 86);
-            scintilla1.Styles[Style.Cpp.CommentLine].ForeColor = Color.FromArgb(5, 30, 86);
-            scintilla1.Styles[Style.Cpp.CommentLineDoc].ForeColor = Color.FromArgb(5, 30, 86);
-            scintilla1.Styles[Style.Cpp.Number].ForeColor = Color.Yellow;
+            scintilla1.StyleClearAll();
+            scintilla1.Styles[Style.Cpp.Default].ForeColor = Settings.defaultColor;
+            scintilla1.Styles[Style.Cpp.Comment].ForeColor = Settings.commentColor;
+            scintilla1.Styles[Style.Cpp.CommentLine].ForeColor = Settings.commentLineColor;
+            scintilla1.Styles[Style.Cpp.CommentLineDoc].ForeColor = Settings.commentLineDocColor;
+            scintilla1.Styles[Style.Cpp.Number].ForeColor = Settings.numberColor;
+            scintilla1.Styles[Style.Cpp.String].ForeColor = Settings.stringColor;
+            scintilla1.Styles[Style.Cpp.Character].ForeColor = Settings.characterColor;
+            scintilla1.Styles[Style.Cpp.Verbatim].ForeColor = Settings.literalColor;
+            scintilla1.Styles[Style.Cpp.StringEol].BackColor = Settings.brokenstringColor;
+            scintilla1.Styles[Style.Cpp.Operator].ForeColor = Settings.operatorColor;
+            scintilla1.Styles[Style.Cpp.Preprocessor].ForeColor = Settings.launchargsColor;
+            scintilla1.Styles[Style.Default].BackColor = Settings.backgroundColor;
+            scintilla1.Styles[Style.Default].ForeColor = Settings.foregroundColor;
+            scintilla1.CaretForeColor = Settings.caretColor;
 
 
-            scintilla1.Styles[Style.Cpp.String].ForeColor = Color.FromArgb(241, 196, 15);
-            scintilla1.Styles[Style.Cpp.Character].ForeColor = Color.FromArgb(241, 196, 15);
-            scintilla1.Styles[Style.Cpp.Verbatim].ForeColor = Color.FromArgb(241, 196, 15);
-            scintilla1.Styles[Style.Cpp.StringEol].BackColor = Color.Black;
-            scintilla1.Styles[Style.Cpp.Operator].ForeColor = Color.FromArgb(102, 255, 51);
-            scintilla1.Styles[Style.Cpp.Preprocessor].ForeColor = Color.Maroon;
-            scintilla1.SetKeywords(0, Completion.connectorsString());
-            scintilla1.SetKeywords(1, Completion.commandString());
+            #region 1st keywords
+            scintilla1.SetKeywords(0, Completion.connectorsString);
+            scintilla1.Styles[Style.Cpp.Word].ForeColor = Settings.comparatorColor;
+            #endregion
 
-            scintilla1.Styles[Style.Cpp.Word].ForeColor = Color.FromArgb(0, 61, 153);
-            scintilla1.Styles[Style.Cpp.Word2].ForeColor = Color.FromArgb(153, 0, 61);
+            #region 2nd keywords
+            scintilla1.SetKeywords(1, Completion.commandString);
+            scintilla1.Styles[Style.Cpp.Word2].ForeColor = Settings.commandColor;
+            #endregion
+
+            #region 3rd keywords
+            scintilla1.SetKeywords(3, Completion.startingString);
+            scintilla1.Styles[Style.Cpp.GlobalClass].ForeColor = Settings.startingColor;
+            #endregion
 
             scintilla1.Lexer = Lexer.Cpp;
 
-            // Set the keywords
+
+            label3.BackColor = Settings.lineBgColor;
+            label3.ForeColor = Settings.lineColor;
 
             updateLineNums();
         }

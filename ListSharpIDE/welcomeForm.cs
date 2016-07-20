@@ -15,9 +15,9 @@ namespace ListSharpIDE
         public welcomeForm()
         {      
             InitializeComponent();
-            
-            Completion.createDictionaries();
-            Initialize.readWiki();
+
+            Initialize.initializeAll();
+
             launchedDirectly();
         }
         IDEform IDEform = new IDEform();
@@ -42,7 +42,10 @@ namespace ListSharpIDE
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            newfile newfile = new newfile();
+            newfile.ShowDialog();
+            if (workingEnviroment.activeFilePath != "")
+                showIDE();
         }
 
         private void button2_Click(object sender, EventArgs e)

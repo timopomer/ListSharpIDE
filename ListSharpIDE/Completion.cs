@@ -10,20 +10,29 @@ namespace ListSharpIDE
     {
         //functionType => (functionName,(Wiki,Uses))
         public static Dictionary<String, Dictionary<String, Tuple<String, String[]>>> wikiDictionary = new Dictionary<String, Dictionary<String, Tuple<String, String[]>>>();
-        public static string[] logicWords = new string[] { "TO", "SPLIT", "BY", "FROM", "IN", "WITH", "AS" };
-        public static string[] comparators = new string[] { "ANY", "EVERY", "LENGTH", "IN", "STRG", "IS", "ISNOT", "ISUNDER", "ISOVER", "ISEQUAL", "CONTAINS", "CONTAINSNOT" };
+        public static string[] logicWords = new string[] { "TO", "SPLIT", "BY", "FROM", "IN", "WITH", "AS" , "WHERE" , "AND", "ANY", "EVERY", "LENGTH", "IN" };
+        public static string[] comparators = new string[] { "IS", "ISNOT", "ISUNDER", "ISOVER", "ISEQUAL", "CONTAINS", "CONTAINSNOT" };
+        //public static string[] comparators = new string[] { "ANY", "EVERY", "LENGTH", "IN", "STRG", "ROWS", "NUMB", "IS", "ISNOT", "ISUNDER", "ISOVER", "ISEQUAL", "CONTAINS", "CONTAINSNOT" };
         public static Func<Dictionary<String, Tuple<String, String[]>>,String> getDictionaryNameEntries = input => String.Join(" ", input.Select(n => n.Key));
 
-        public static string connectorsString()
+
+        public static string connectorsString = "";
+        public static string commandString = "";
+        public static string startingString = "";
+        public static void setConnectorsString()
         {
-            return String.Join(" ", logicWords) + " " + String.Join(" ", comparators);
+            connectorsString = String.Join(" ", logicWords) + " " + String.Join(" ", comparators);
         }
-        public static string commandString()
+        public static void setCommandString()
         {
-            return getDictionaryNameEntries.Invoke(wikiDictionary["combinedFunctions"]) + " " + 
-                   getDictionaryNameEntries.Invoke(wikiDictionary["strgFunctions"]) + " " + 
-                   getDictionaryNameEntries.Invoke(wikiDictionary["rowsFunctions"]) + " " +
-                   getDictionaryNameEntries.Invoke(wikiDictionary["specialFunctions"]);
+            commandString = getDictionaryNameEntries.Invoke(wikiDictionary["combinedFunctions"]) + " " +
+                            getDictionaryNameEntries.Invoke(wikiDictionary["strgFunctions"]) + " " +
+                            getDictionaryNameEntries.Invoke(wikiDictionary["rowsFunctions"]) + " " +
+                            getDictionaryNameEntries.Invoke(wikiDictionary["conditionals"]);
+        }
+        public static void setStartingString()
+        {
+            startingString = getDictionaryNameEntries.Invoke(wikiDictionary["specialFunctions"]) + " " + String.Join(" ",new string[] { "STRG", "ROWS", "NUMB" });
         }
         public static void createDictionaries()
         {

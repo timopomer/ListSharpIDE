@@ -105,7 +105,6 @@
             // 
             // pictureBox4
             // 
-            this.pictureBox4.Image = global::ListSharpIDE.Properties.Resources.logo;
             this.pictureBox4.Location = new System.Drawing.Point(869, 7);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(106, 27);
@@ -116,7 +115,6 @@
             // pictureBox5
             // 
             this.pictureBox5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
-            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
             this.pictureBox5.Location = new System.Drawing.Point(77, 3);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(34, 34);

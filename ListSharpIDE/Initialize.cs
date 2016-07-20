@@ -14,6 +14,16 @@ namespace ListSharpIDE
     public static class Initialize
     {
         public static Func<string, string[]> extractCommands = x => x.Split('\n').Where(n => n.Contains("<td><a href")).Select(n => new Regex(@">([^>]*)</a></td>").Match(n).Groups[1].Value).ToArray();
+        public static void initializeAll()
+        {
+            Completion.createDictionaries();
+            readWiki();
+            Completion.setCommandString();
+            Completion.setConnectorsString();
+            Completion.setStartingString();
+            Settings.loadSettings();
+        }
+
         public static void downloadWiki()
         {
             downloadConstants();
@@ -40,7 +50,9 @@ namespace ListSharpIDE
                     string[] wikiLines = Regex.Split(singleWiki, "\r\n");
                     Completion.wikiDictionary[differentWikis.Key].Add(wikiLines[0], new Tuple<string, string[]>(wikiLines[1], wikiLines.Skip(2).Take(wikiLines.Length-2).ToArray()));
                 }
+                
             }
+
         }
 
         public static void saveWiki()
