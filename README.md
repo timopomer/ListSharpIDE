@@ -8,7 +8,7 @@ This IDE is meant to be a convinient enviroment for the development of [ListShar
 
 ### Example working enviroment screenshot
 
-![Beta](http://puu.sh/q5Ux3/f09d4e61a9.png)
+![Beta](http://imgur.com/AgjkGUi)
 
 ## ListSharpIDE - Teal Specifications
 
