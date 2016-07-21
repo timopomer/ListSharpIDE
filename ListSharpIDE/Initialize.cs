@@ -21,6 +21,7 @@ namespace ListSharpIDE
             Completion.setCommandString();
             Completion.setConnectorsString();
             Completion.setStartingString();
+            Settings.Initialize();
             Settings.loadSettings();
         }
 

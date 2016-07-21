@@ -19,8 +19,30 @@ namespace ListSharpIDE
         }
         Button[] tabButtons;
         public bool changed = false;
+        PictureBox[] indexedPixtures;
+
+
         private void settingsForm_Load(object sender, EventArgs e)
         {
+            indexedPixtures = new PictureBox[] {    pictureBox1,
+                                                    pictureBox2,
+                                                    pictureBox3,
+                                                    pictureBox4,
+                                                    pictureBox5,
+                                                    pictureBox6,
+                                                    pictureBox7,
+                                                    pictureBox8,
+                                                    pictureBox9,
+                                                    pictureBox10,
+                                                    pictureBox11,
+                                                    pictureBox12,
+                                                    pictureBox13,
+                                                    pictureBox14,
+                                                    pictureBox15,
+                                                    pictureBox16,
+                                                    pictureBox17,
+                                                    pictureBox18,
+                                                    pictureBox19 };
             changeButtonStates(false);
             label19.Text = @"1
 2
@@ -42,26 +64,10 @@ DEBG = a";
             tabButtons = new Button[] { tab1_button, tab2_button, tab3_button, tab4_button, tab5_button, tab6_button };
             tabChange(0);
             scintilla1.Margins[1].Width = 0;
-            
-            pictureBox1.BackColor = Settings.defaultColor;
-            pictureBox2.BackColor = Settings.commentColor;
-            pictureBox3.BackColor = Settings.commentLineColor;
-            pictureBox4.BackColor = Settings.commentLineDocColor;
-            pictureBox5.BackColor = Settings.numberColor;
-            pictureBox6.BackColor = Settings.stringColor;
-            pictureBox7.BackColor = Settings.characterColor;
-            pictureBox8.BackColor = Settings.literalColor;
-            pictureBox9.BackColor = Settings.brokenstringColor;
-            pictureBox10.BackColor = Settings.operatorColor;
-            pictureBox11.BackColor = Settings.launchargsColor;
-            pictureBox12.BackColor = Settings.comparatorColor;
-            pictureBox13.BackColor = Settings.commandColor;
-            pictureBox14.BackColor = Settings.startingColor;
-            pictureBox15.BackColor = Settings.backgroundColor;
-            pictureBox16.BackColor = Settings.foregroundColor;
-            pictureBox17.BackColor = Settings.caretColor;
-            pictureBox18.BackColor = Settings.lineBgColor;
-            pictureBox19.BackColor = Settings.lineColor;
+
+            for (int i = 0; i<indexedPixtures.Length; i++)
+            indexedPixtures[i].BackColor = Settings.Highlighting[Settings.colorProperties[i]];
+
         }
 
 
@@ -88,41 +94,40 @@ DEBG = a";
         private void timer1_Tick(object sender, EventArgs e)
         {
             scintilla1.StyleClearAll();
-            scintilla1.Styles[Style.Cpp.Default].ForeColor = Settings.defaultColor;
-            scintilla1.Styles[Style.Cpp.Comment].ForeColor = Settings.commentColor;
-            scintilla1.Styles[Style.Cpp.CommentLine].ForeColor = Settings.commentLineColor;
-            scintilla1.Styles[Style.Cpp.CommentLineDoc].ForeColor = Settings.commentLineDocColor;
-            scintilla1.Styles[Style.Cpp.Number].ForeColor = Settings.numberColor;
-            scintilla1.Styles[Style.Cpp.String].ForeColor = Settings.stringColor;
-            scintilla1.Styles[Style.Cpp.Character].ForeColor = Settings.characterColor;
-            scintilla1.Styles[Style.Cpp.Verbatim].ForeColor = Settings.literalColor;
-            scintilla1.Styles[Style.Cpp.StringEol].BackColor = Settings.brokenstringColor;
-            scintilla1.Styles[Style.Cpp.Operator].ForeColor = Settings.operatorColor;
-            scintilla1.Styles[Style.Cpp.Preprocessor].ForeColor = Settings.launchargsColor;
-            scintilla1.Styles[Style.Default].BackColor = Settings.backgroundColor;
-            scintilla1.Styles[Style.Default].ForeColor = Settings.foregroundColor;
-            scintilla1.CaretForeColor = Settings.caretColor;
+            scintilla1.Styles[Style.Cpp.Default].ForeColor = Settings.Highlighting["defaultColor"];
+            scintilla1.Styles[Style.Cpp.Comment].ForeColor = Settings.Highlighting["commentColor"];
+            scintilla1.Styles[Style.Cpp.CommentLine].ForeColor = Settings.Highlighting["commentLineColor"];
+            scintilla1.Styles[Style.Cpp.CommentLineDoc].ForeColor = Settings.Highlighting["commentLineDocColor"];
+            scintilla1.Styles[Style.Cpp.Number].ForeColor = Settings.Highlighting["numberColor"];
+            scintilla1.Styles[Style.Cpp.String].ForeColor = Settings.Highlighting["stringColor"];
+            scintilla1.Styles[Style.Cpp.Character].ForeColor = Settings.Highlighting["characterColor"];
+            scintilla1.Styles[Style.Cpp.Verbatim].ForeColor = Settings.Highlighting["literalColor"];
+            scintilla1.Styles[Style.Cpp.StringEol].BackColor = Settings.Highlighting["brokenstringColor"];
+            scintilla1.Styles[Style.Cpp.Operator].ForeColor = Settings.Highlighting["operatorColor"];
+            scintilla1.Styles[Style.Cpp.Preprocessor].ForeColor = Settings.Highlighting["launchargsColor"];
+            scintilla1.Styles[Style.Default].BackColor = Settings.Highlighting["backgroundColor"];
+            scintilla1.Styles[Style.Default].ForeColor = Settings.Highlighting["foregroundColor"];
+            scintilla1.CaretForeColor = Settings.Highlighting["caretColor"];
 
-            //scintilla1.Styles[Style.Default].BackColor = Color.Pink;
             #region 1st keywords
             scintilla1.SetKeywords(0, Completion.connectorsString);
-            scintilla1.Styles[Style.Cpp.Word].ForeColor = Settings.comparatorColor;
+            scintilla1.Styles[Style.Cpp.Word].ForeColor = Settings.Highlighting["comparatorColor"];
             #endregion
 
             #region 2nd keywords
             scintilla1.SetKeywords(1, Completion.commandString);
-            scintilla1.Styles[Style.Cpp.Word2].ForeColor = Settings.commandColor;
+            scintilla1.Styles[Style.Cpp.Word2].ForeColor = Settings.Highlighting["commandColor"];
             #endregion
 
             #region 3rd keywords
             scintilla1.SetKeywords(3, Completion.startingString);
-            scintilla1.Styles[Style.Cpp.GlobalClass].ForeColor = Settings.startingColor;
+            scintilla1.Styles[Style.Cpp.GlobalClass].ForeColor = Settings.Highlighting["startingColor"];
             #endregion
 
             scintilla1.Lexer = Lexer.Cpp;
 
-            label19.BackColor = Settings.lineBgColor;
-            label19.ForeColor = Settings.lineColor;
+            label19.BackColor = Settings.Highlighting["lineBgColor"];
+            label19.ForeColor = Settings.Highlighting["lineColor"];
         }
 
         private void colorChange(int index)
@@ -132,85 +137,9 @@ DEBG = a";
             if (result == DialogResult.OK)
             {
                 changedSettings();
-                switch (index)
-                {
-                    case 0:
-                        pictureBox1.BackColor = colorDialog1.Color;
-                        Settings.defaultColor = colorDialog1.Color;
-                        break;
-                    case 1:
-                        pictureBox2.BackColor = colorDialog1.Color;
-                        Settings.commentColor = colorDialog1.Color;
-                        break;
-                    case 2:
-                        pictureBox3.BackColor = colorDialog1.Color;
-                        Settings.commentLineColor = colorDialog1.Color;
-                        break;
-                    case 3:
-                        pictureBox4.BackColor = colorDialog1.Color;
-                        Settings.commentLineDocColor = colorDialog1.Color;
-                        break;
-                    case 4:
-                        pictureBox5.BackColor = colorDialog1.Color;
-                        Settings.numberColor = colorDialog1.Color;
-                        break;
-                    case 5:
-                        pictureBox6.BackColor = colorDialog1.Color;
-                        Settings.stringColor = colorDialog1.Color;
-                        break;
-                    case 6:
-                        pictureBox7.BackColor = colorDialog1.Color;
-                        Settings.characterColor = colorDialog1.Color;
-                        break;
-                    case 7:
-                        pictureBox8.BackColor = colorDialog1.Color;
-                        Settings.literalColor = colorDialog1.Color;
-                        break;
-                    case 8:
-                        pictureBox9.BackColor = colorDialog1.Color;
-                        Settings.brokenstringColor = colorDialog1.Color;
-                        break;
-                    case 9:
-                        pictureBox10.BackColor = colorDialog1.Color;
-                        Settings.operatorColor = colorDialog1.Color;
-                        break;
-                    case 10:
-                        pictureBox11.BackColor = colorDialog1.Color;
-                        Settings.launchargsColor = colorDialog1.Color;
-                        break;
-                    case 11:
-                        pictureBox12.BackColor = colorDialog1.Color;
-                        Settings.comparatorColor = colorDialog1.Color;
-                        break;
-                    case 12:
-                        pictureBox13.BackColor = colorDialog1.Color;
-                        Settings.commandColor = colorDialog1.Color;
-                        break;
-                    case 13:
-                        pictureBox14.BackColor = colorDialog1.Color;
-                        Settings.startingColor = colorDialog1.Color;
-                        break;
-                    case 14:
-                        pictureBox15.BackColor = colorDialog1.Color;
-                        Settings.backgroundColor = colorDialog1.Color;
-                        break;
-                    case 15:
-                        pictureBox16.BackColor = colorDialog1.Color;
-                        Settings.foregroundColor = colorDialog1.Color;
-                        break;
-                    case 16:
-                        pictureBox17.BackColor = colorDialog1.Color;
-                        Settings.caretColor = colorDialog1.Color;
-                        break;
-                    case 17:
-                        pictureBox18.BackColor = colorDialog1.Color;
-                        Settings.lineBgColor = colorDialog1.Color;
-                        break;
-                    case 18:
-                        pictureBox19.BackColor = colorDialog1.Color;
-                        Settings.lineColor = colorDialog1.Color;
-                        break;
-                }
+
+                        indexedPixtures[index].BackColor = colorDialog1.Color;
+                        Settings.Highlighting[Settings.colorProperties[index]] = colorDialog1.Color;
 
             }
         }

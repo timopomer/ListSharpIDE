@@ -13,7 +13,7 @@ namespace ListSharpIDE
     public partial class welcomeForm : Form
     {
         public welcomeForm()
-        {      
+        {
             InitializeComponent();
 
             Initialize.initializeAll();
@@ -23,7 +23,7 @@ namespace ListSharpIDE
         IDEform IDEform = new IDEform();
         private void welcomeForm_Load(object sender, EventArgs e)
         {
-            if (workingEnviroment.activeFilePath!="")
+            if (workingEnviroment.activeFilePath != "")
             {
                 this.Opacity = 0;
                 showIDE();
@@ -67,6 +67,13 @@ namespace ListSharpIDE
             IDEform.Show();
         }
 
+        private void welcomeForm_VisibleChanged(object sender, EventArgs e)
+        {
+            if (workingEnviroment.activeFilePath != "")
+            {
 
+                this.Hide();
+            }
+        }
     }
 }

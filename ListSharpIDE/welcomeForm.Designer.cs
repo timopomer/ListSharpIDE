@@ -147,6 +147,7 @@
             this.Text = "Start Page";
             this.TransparencyKey = System.Drawing.Color.Red;
             this.Load += new System.EventHandler(this.welcomeForm_Load);
+            this.VisibleChanged += new System.EventHandler(this.welcomeForm_VisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

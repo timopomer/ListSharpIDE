@@ -119,43 +119,40 @@ namespace ListSharpIDE
         private void timer1_Tick(object sender, EventArgs e)
         {
             scintilla1.StyleClearAll();
-            scintilla1.Styles[Style.Cpp.Default].ForeColor = Settings.defaultColor;
-            scintilla1.Styles[Style.Cpp.Comment].ForeColor = Settings.commentColor;
-            scintilla1.Styles[Style.Cpp.CommentLine].ForeColor = Settings.commentLineColor;
-            scintilla1.Styles[Style.Cpp.CommentLineDoc].ForeColor = Settings.commentLineDocColor;
-            scintilla1.Styles[Style.Cpp.Number].ForeColor = Settings.numberColor;
-            scintilla1.Styles[Style.Cpp.String].ForeColor = Settings.stringColor;
-            scintilla1.Styles[Style.Cpp.Character].ForeColor = Settings.characterColor;
-            scintilla1.Styles[Style.Cpp.Verbatim].ForeColor = Settings.literalColor;
-            scintilla1.Styles[Style.Cpp.StringEol].BackColor = Settings.brokenstringColor;
-            scintilla1.Styles[Style.Cpp.Operator].ForeColor = Settings.operatorColor;
-            scintilla1.Styles[Style.Cpp.Preprocessor].ForeColor = Settings.launchargsColor;
-            scintilla1.Styles[Style.Default].BackColor = Settings.backgroundColor;
-            scintilla1.Styles[Style.Default].ForeColor = Settings.foregroundColor;
-            scintilla1.CaretForeColor = Settings.caretColor;
-
+            scintilla1.Styles[Style.Cpp.Default].ForeColor = Settings.Highlighting["defaultColor"];
+            scintilla1.Styles[Style.Cpp.Comment].ForeColor = Settings.Highlighting["commentColor"];
+            scintilla1.Styles[Style.Cpp.CommentLine].ForeColor = Settings.Highlighting["commentLineColor"];
+            scintilla1.Styles[Style.Cpp.CommentLineDoc].ForeColor = Settings.Highlighting["commentLineDocColor"];
+            scintilla1.Styles[Style.Cpp.Number].ForeColor = Settings.Highlighting["numberColor"];
+            scintilla1.Styles[Style.Cpp.String].ForeColor = Settings.Highlighting["stringColor"];
+            scintilla1.Styles[Style.Cpp.Character].ForeColor = Settings.Highlighting["characterColor"];
+            scintilla1.Styles[Style.Cpp.Verbatim].ForeColor = Settings.Highlighting["literalColor"];
+            scintilla1.Styles[Style.Cpp.StringEol].BackColor = Settings.Highlighting["brokenstringColor"];
+            scintilla1.Styles[Style.Cpp.Operator].ForeColor = Settings.Highlighting["operatorColor"];
+            scintilla1.Styles[Style.Cpp.Preprocessor].ForeColor = Settings.Highlighting["launchargsColor"];
+            scintilla1.Styles[Style.Default].BackColor = Settings.Highlighting["backgroundColor"];
+            scintilla1.Styles[Style.Default].ForeColor = Settings.Highlighting["foregroundColor"];
+            scintilla1.CaretForeColor = Settings.Highlighting["caretColor"];
 
             #region 1st keywords
             scintilla1.SetKeywords(0, Completion.connectorsString);
-            scintilla1.Styles[Style.Cpp.Word].ForeColor = Settings.comparatorColor;
+            scintilla1.Styles[Style.Cpp.Word].ForeColor = Settings.Highlighting["comparatorColor"];
             #endregion
 
             #region 2nd keywords
             scintilla1.SetKeywords(1, Completion.commandString);
-            scintilla1.Styles[Style.Cpp.Word2].ForeColor = Settings.commandColor;
+            scintilla1.Styles[Style.Cpp.Word2].ForeColor = Settings.Highlighting["commandColor"];
             #endregion
 
             #region 3rd keywords
             scintilla1.SetKeywords(3, Completion.startingString);
-            scintilla1.Styles[Style.Cpp.GlobalClass].ForeColor = Settings.startingColor;
+            scintilla1.Styles[Style.Cpp.GlobalClass].ForeColor = Settings.Highlighting["startingColor"];
             #endregion
 
             scintilla1.Lexer = Lexer.Cpp;
 
-
-            label3.BackColor = Settings.lineBgColor;
-            label3.ForeColor = Settings.lineColor;
-
+            label3.BackColor = Settings.Highlighting["lineBgColor"];
+            label3.ForeColor = Settings.Highlighting["lineColor"];
             updateLineNums();
         }
         public void updateLineNums()
