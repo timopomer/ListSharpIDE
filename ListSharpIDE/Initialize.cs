@@ -14,6 +14,8 @@ namespace ListSharpIDE
     public static class Initialize
     {
         public static Func<string, string[]> extractCommands = x => x.Split('\n').Where(n => n.Contains("<td><a href")).Select(n => new Regex(@">([^>]*)</a></td>").Match(n).Groups[1].Value).ToArray();
+        public static string wikiPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\wikiDocs";
+
         public static void initializeAll()
         {
             Completion.createDictionaries();
@@ -34,17 +36,25 @@ namespace ListSharpIDE
             saveWiki();
         }
 
+        public static void reDownloadWiki()
+        {
+            Directory.Delete(wikiPath,true);
+            Completion.resetDictionaries();
+            downloadWiki();
+            MessageBox.Show("Finished redownloading wiki");
+        }
+
         public static void readWiki()
         {
-            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\wikiDocs";
-            if (!Directory.Exists(path))
+            
+            if (!Directory.Exists(wikiPath))
             {
                 downloadWiki();
                 return;
             }
             foreach (KeyValuePair<String, Dictionary<String, Tuple<String, String[]>>> differentWikis in Completion.wikiDictionary)
             {
-                string singlefile = File.ReadAllText(path + "\\" + differentWikis.Key + ".txt");
+                string singlefile = File.ReadAllText(wikiPath + "\\" + differentWikis.Key + ".txt");
                 string[] wikiArr = Regex.Split(singlefile, "\r\n---\r\n", RegexOptions.Singleline);
                 foreach (string singleWiki in wikiArr)
                 {

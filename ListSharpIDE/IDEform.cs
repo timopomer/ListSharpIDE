@@ -41,14 +41,18 @@ namespace ListSharpIDE
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+            /*
             scintilla1.Height = 700 - 220;
             label3.Height = 700 - 220;
             richTextBox1.Width = 1000;
+            richTextBox2.Width = 1000;
             scintilla1.Width = 947;
-            richTextBox1.Text = "interesting";
-            richTextBox1.Location = new Point(0,40 + 700 - 220);
+
+            richTextBox1.Location = new Point(0, 40 + 700 - 220);
+            richTextBox2.Location = new Point(0, 95 + 700 - 220);
             pictureBox4.Location = new Point(1000-100-27, 7);
+            */
+            updateElementLocations();
             scintilla1.Margins[1].Width = 0;
             
             scintilla1.StyleClearAll();
@@ -56,21 +60,103 @@ namespace ListSharpIDE
             
 
         }
-
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            updateElementLocations();
+        }
+        public void updateElementLocations()
+        {
+            scintilla1.Width = this.Size.Width;
+            scintilla1.Height = this.Size.Height - 210;
+            label3.Height = this.Size.Height - 210;
+            richTextBox1.Location = new Point(0, 50 + this.Size.Height - 220);
+            richTextBox1.Width = this.Size.Width;
+            label1.Location = new Point(0, 80 + this.Size.Height - 220);
+            richTextBox2.Location = new Point(0, 104 + this.Size.Height - 220);
+            richTextBox2.Width = this.Size.Width;
+            pictureBox4.Location = new Point(this.Size.Width - 100 - 27, 7);
+        }
         private void scintilla1_TextChanged(object sender, EventArgs e)
         {
             saved = false;
+            updateWorkingVariables();
             updateInfo();
         }
 
         private void scintilla1_KeyDown(object sender, KeyEventArgs e)
         {
-            updateInfo();
+            processWiki();
+
         }
 
-        private void scintilla1_Click(object sender, EventArgs e)
+        private void scintilla1_Click(object sender, EventArgs e) => processWiki();
+
+
+        private void scintilla1_CharAdded(object sender, CharAddedEventArgs e)
         {
-            updateInfo();
+
+        }
+
+        public void updateWorkingVariables()
+        {
+            workingEnviroment.numbVars = scintilla1.Lines.Where(n => n.Text.StartsWith("NUMB")).Select(m => new Regex("NUMB (.*?)=").Match(m.Text).Groups[1].Value.Trim()).Where(k => k != "").Distinct().ToArray();
+            workingEnviroment.strgVars = scintilla1.Lines.Where(n => n.Text.StartsWith("STRG")).Select(m => new Regex("STRG (.*?)=").Match(m.Text).Groups[1].Value.Trim()).Where(k => k != "").Distinct().ToArray();
+            workingEnviroment.rowsVars = scintilla1.Lines.Where(n => n.Text.StartsWith("ROWS")).Select(m => new Regex("ROWS (.*?)=").Match(m.Text).Groups[1].Value.Trim()).Where(k => k != "").Distinct().ToArray();
+        }
+        public void processWiki()
+        {
+            string currentLine = scintilla1.Lines[scintilla1.CurrentLine].Text;
+            foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.wikiDictionary["specialFunctions"])
+            {
+                if (isRightKey(currentLine, kvp))
+                    return;
+            }
+            foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.wikiDictionary["launchargs"])
+            {
+                if (isRightKey(currentLine, kvp))
+                    return;
+            }
+            if (currentLine.StartsWith("["))
+            foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.wikiDictionary["conditionals"])
+            {
+                if (isRightKey(currentLine.Substring(1), kvp))
+                    return;
+            }
+
+            if (!currentLine.Contains("="))
+                return;
+
+            currentLine = currentLine.Split('=')[1].Trim();
+            foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.wikiDictionary["combinedFunctions"])
+            {
+                if (isRightKey(currentLine, kvp))
+                    return;
+            }
+            foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.wikiDictionary["strgFunctions"])
+            {
+                if (isRightKey(currentLine, kvp))
+                    return;
+            }
+            foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.wikiDictionary["rowsFunctions"])
+            {
+                if (isRightKey(currentLine, kvp))
+                    return;
+            }
+
+        }
+        public bool isRightKey(string line,KeyValuePair<String, Tuple<String, String[]>> kvp)
+        {
+            if (line.StartsWith(kvp.Key))
+            {
+                showWiki(kvp);
+                return true;
+            }
+            return false;
+        }
+        public void showWiki(KeyValuePair<String, Tuple<String, String[]>> kvp)
+        {
+            richTextBox1.Text = kvp.Key;
+            richTextBox2.Text = kvp.Value.Item1;
         }
 
         public void updateInfo()
@@ -106,18 +192,16 @@ namespace ListSharpIDE
             */
         }
 
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-            scintilla1.Width = this.Size.Width;
-            scintilla1.Height = this.Size.Height - 220;
-            label3.Height = this.Size.Height - 220;
-            richTextBox1.Location = new Point(0, 40 + this.Size.Height - 220);
-            richTextBox1.Width = this.Size.Width;
-            pictureBox4.Location = new Point(this.Size.Width - 100 - 27, 7);
-        }
+
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (scintilla1.Zoom > 6)
+                scintilla1.Zoom = 6;
+            if (scintilla1.Zoom < -6)
+                scintilla1.Zoom = -6;
+            label3.Font = new Font(scintilla1.Styles[Style.Default].Font, scintilla1.Styles[Style.Default].Size+ scintilla1.Zoom);
+
             scintilla1.StyleClearAll();
             scintilla1.Styles[Style.Cpp.Default].ForeColor = Settings.Highlighting["defaultColor"];
             scintilla1.Styles[Style.Cpp.Comment].ForeColor = Settings.Highlighting["commentColor"];
@@ -157,15 +241,7 @@ namespace ListSharpIDE
         }
         public void updateLineNums()
         {
-            string linesNumbs = "";
-            for (int i = 0; i < 100; i++)
-                linesNumbs += (scintilla1.FirstVisibleLine + i) + Environment.NewLine;
-
-            label3.Text = linesNumbs;
-        }
-        private void scintilla1_CharAdded(object sender, CharAddedEventArgs e)
-        {
-            
+            label3.Text = String.Join(Environment.NewLine, Enumerable.Range(scintilla1.FirstVisibleLine, scintilla1.FirstVisibleLine + 500));
         }
 
 

@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -24,6 +26,7 @@ namespace ListSharpIDE
 
         private void settingsForm_Load(object sender, EventArgs e)
         {
+            label23.Text = Directory.GetCreationTime(Initialize.wikiPath).ToString();
             indexedPixtures = new PictureBox[] {    pictureBox1,
                                                     pictureBox2,
                                                     pictureBox3,
@@ -52,7 +55,18 @@ namespace ListSharpIDE
 6
 7
 8
-9";
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20";
             scintilla1.Text = @"#DownloadMaxTries: 3
 //comment
 /*commented out*/
@@ -93,6 +107,12 @@ DEBG = a";
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (scintilla1.Zoom > 6)
+                scintilla1.Zoom = 6;
+            if (scintilla1.Zoom < -6)
+                scintilla1.Zoom = -6;
+            label19.Font = new Font(scintilla1.Styles[Style.Default].Font, scintilla1.Styles[Style.Default].Size + scintilla1.Zoom);
+
             scintilla1.StyleClearAll();
             scintilla1.Styles[Style.Cpp.Default].ForeColor = Settings.Highlighting["defaultColor"];
             scintilla1.Styles[Style.Cpp.Comment].ForeColor = Settings.Highlighting["commentColor"];
@@ -180,6 +200,34 @@ DEBG = a";
         public void changeButtonStates(bool state)
         {
             new List<Button>() { button1 }.ForEach(n => n.Enabled = state);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            Color Guiblue = Color.FromArgb(44, 62, 80);
+            pictureBox20.BackColor = Guiblue;
+            pictureBox21.BackColor = Guiblue;
+            pictureBox22.BackColor = Guiblue;
+            pictureBox23.BackColor = Guiblue;
+            pictureBox24.BackColor = Guiblue;
+            button2.Enabled = false;
+            System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
+            t.Interval = 1000;
+            PictureBox[] tempPic = new PictureBox[] { pictureBox20, pictureBox21, pictureBox22, pictureBox23, pictureBox24 };
+            int index = 0;
+            
+            t.Tick += (j, k) => {
+                tempPic[index].BackColor = Color.Teal;
+                index++;
+                if (index == 5)
+                    t.Enabled = false;
+            };
+            t.Enabled = true;
+            Thread tr = new Thread(Initialize.reDownloadWiki);
+            tr.Start();
+            button2.Enabled = true;
+            label23.Text = Directory.GetCreationTime(Initialize.wikiPath).ToString();
         }
     }
 }
