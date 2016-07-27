@@ -23,6 +23,11 @@ namespace ListSharpIDE
         {
             connectorsString = String.Join(" ", logicWords) + " " + String.Join(" ", comparators);
         }
+        public static Dictionary<String, Tuple<String, String[]>> combineDictionaries(params string[] dictionaryNames)
+        {
+            return dictionaryNames.Select(n=> wikiDictionary[n]).SelectMany(dict => dict)
+                         .ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
         public static void setCommandString()
         {
             commandString = getDictionaryNameEntries.Invoke(wikiDictionary["combinedFunctions"]) + " " +

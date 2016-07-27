@@ -13,5 +13,9 @@ namespace ListSharpIDE
         public static string[] numbVars;
         public static string[] strgVars;
         public static string[] rowsVars;
+
+        public static bool beforeInsertion = false;
+        public static bool recursivelyInserting = false;
+        public static string[] toInsertQuery;
     }
 }

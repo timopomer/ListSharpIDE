@@ -40,6 +40,8 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.wikiDisplayTimer = new System.Windows.Forms.Timer(this.components);
+            this.checkQueryToBeInserted = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -53,12 +55,14 @@
             this.scintilla1.Location = new System.Drawing.Point(37, 40);
             this.scintilla1.Name = "scintilla1";
             this.scintilla1.ScrollWidth = 200;
-            this.scintilla1.Size = new System.Drawing.Size(944, 460);
+            this.scintilla1.Size = new System.Drawing.Size(944, 476);
             this.scintilla1.TabIndex = 0;
             this.scintilla1.UseTabs = false;
             this.scintilla1.AutoCCancelled += new System.EventHandler<System.EventArgs>(this.scintilla1_AutoCCancelled);
             this.scintilla1.AutoCCompleted += new System.EventHandler<ScintillaNET.AutoCSelectionEventArgs>(this.scintilla1_AutoCCompleted);
+            this.scintilla1.AutoCSelection += new System.EventHandler<ScintillaNET.AutoCSelectionEventArgs>(this.scintilla1_AutoCSelection);
             this.scintilla1.CharAdded += new System.EventHandler<ScintillaNET.CharAddedEventArgs>(this.scintilla1_CharAdded);
+            this.scintilla1.InsertCheck += new System.EventHandler<ScintillaNET.InsertCheckEventArgs>(this.scintilla1_InsertCheck);
             this.scintilla1.TextChanged += new System.EventHandler(this.scintilla1_TextChanged);
             this.scintilla1.Click += new System.EventHandler(this.scintilla1_Click);
             this.scintilla1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.scintilla1_KeyDown);
@@ -77,7 +81,7 @@
             this.label3.Location = new System.Drawing.Point(1, 40);
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(34, 460);
+            this.label3.Size = new System.Drawing.Size(34, 476);
             this.label3.TabIndex = 3;
             this.label3.Text = "9999";
             // 
@@ -163,6 +167,18 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "Wiki definition:";
             // 
+            // wikiDisplayTimer
+            // 
+            this.wikiDisplayTimer.Enabled = true;
+            this.wikiDisplayTimer.Interval = 10;
+            this.wikiDisplayTimer.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
+            // checkQueryToBeInserted
+            // 
+            this.checkQueryToBeInserted.Enabled = true;
+            this.checkQueryToBeInserted.Interval = 1;
+            this.checkQueryToBeInserted.Tick += new System.EventHandler(this.checkQueryToBeInserted_Tick);
+            // 
             // IDEform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -205,6 +221,8 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Timer wikiDisplayTimer;
+        private System.Windows.Forms.Timer checkQueryToBeInserted;
     }
 }
 

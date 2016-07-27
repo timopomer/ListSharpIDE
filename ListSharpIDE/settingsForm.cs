@@ -211,9 +211,9 @@ DEBG = a";
             pictureBox22.BackColor = Guiblue;
             pictureBox23.BackColor = Guiblue;
             pictureBox24.BackColor = Guiblue;
-            button2.Enabled = false;
+
             System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
-            t.Interval = 1000;
+            t.Interval = 5000;
             PictureBox[] tempPic = new PictureBox[] { pictureBox20, pictureBox21, pictureBox22, pictureBox23, pictureBox24 };
             int index = 0;
             
@@ -222,12 +222,19 @@ DEBG = a";
                 index++;
                 if (index == 5)
                     t.Enabled = false;
+                if (Directory.Exists(Initialize.wikiPath))
+                    t.Interval = 100;
             };
             t.Enabled = true;
             Thread tr = new Thread(Initialize.reDownloadWiki);
             tr.Start();
-            button2.Enabled = true;
+
             label23.Text = Directory.GetCreationTime(Initialize.wikiPath).ToString();
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            button2.Enabled = Directory.Exists(Initialize.wikiPath);
         }
     }
 }
