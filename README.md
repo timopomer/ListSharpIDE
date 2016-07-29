@@ -19,7 +19,7 @@ This IDE is meant to be a convinient enviroment for the development of [ListShar
 * Embedded Wiki documentation for all ListSharp commands
 * Custom code highlighting
 * Code completion
-* 
+
 ### To be finished in the Teal version
 * Code snipplets
 * Version control for different ListSharp builds
