@@ -17,11 +17,10 @@ This IDE is meant to be a convinient enviroment for the development of [ListShar
 * Code highlighting
 * Abillity to quickly run code from the IDE
 * Embedded Wiki documentation for all ListSharp commands
-
-### To be finished in the Teal version
-
-* Improved custom code highlighting
+* Custom code highlighting
 * Code completion
+* 
+### To be finished in the Teal version
 * Code snipplets
 * Version control for different ListSharp builds
 * Debugging helper
