@@ -20,12 +20,13 @@ namespace ListSharpIDE
             InitializeComponent();
         }
         Button[] tabButtons;
-        public bool changed = false;
+        public bool changed = false, initial = true;
         PictureBox[] indexedPixtures;
 
 
         private void settingsForm_Load(object sender, EventArgs e)
         {
+
             label23.Text = Directory.GetCreationTime(Initialize.wikiPath).ToString();
             indexedPixtures = new PictureBox[] {    pictureBox1,
                                                     pictureBox2,
@@ -81,6 +82,12 @@ DEBG = a";
 
             for (int i = 0; i<indexedPixtures.Length; i++)
             indexedPixtures[i].BackColor = Settings.Highlighting[Settings.colorProperties[i]];
+
+            setBooleanicPicturebox(pictureBox25, "isEnabled");
+            setBooleanicPicturebox(pictureBox26, "onCharAdded");
+            comboBox1.Items.AddRange(Enum.GetNames(typeof(Keys)));
+            comboBox1.Text = Settings.Autocomplete["activationKey"].ToString();
+            initial = false;
 
         }
 
@@ -158,8 +165,8 @@ DEBG = a";
             {
                 changedSettings();
 
-                        indexedPixtures[index].BackColor = colorDialog1.Color;
-                        Settings.Highlighting[Settings.colorProperties[index]] = colorDialog1.Color;
+                indexedPixtures[index].BackColor = colorDialog1.Color;
+                Settings.Highlighting[Settings.colorProperties[index]] = colorDialog1.Color;
 
             }
         }
@@ -185,6 +192,9 @@ DEBG = a";
         private void pictureBox19_Click(object sender, EventArgs e) => colorChange(18);
 
         private void button1_Click(object sender, EventArgs e) => saveProcess();
+        private void button3_Click(object sender, EventArgs e) => saveProcess();
+        private void button4_Click(object sender, EventArgs e) => saveProcess();
+        private void button5_Click(object sender, EventArgs e) => saveProcess();
 
         public void saveProcess()
         {
@@ -199,7 +209,7 @@ DEBG = a";
         }
         public void changeButtonStates(bool state)
         {
-            new List<Button>() { button1 }.ForEach(n => n.Enabled = state);
+            new List<Button>() { button1,button3,button4,button5 }.ForEach(n => n.Enabled = state);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -236,5 +246,41 @@ DEBG = a";
         {
             button2.Enabled = Directory.Exists(Initialize.wikiPath);
         }
+
+        #region AutoCompelte_tab
+        private void pictureBox25_MouseDown(object sender, MouseEventArgs e)
+        {
+            changedSettings();
+            Settings.Autocomplete["isEnabled"] = !(bool)Settings.Autocomplete["isEnabled"];
+            setBooleanicPicturebox(pictureBox25, "isEnabled");
+        }
+        private void pictureBox26_MouseDown(object sender, MouseEventArgs e)
+        {
+            changedSettings();
+            Settings.Autocomplete["onCharAdded"] = !(bool)Settings.Autocomplete["onCharAdded"];
+            setBooleanicPicturebox(pictureBox26, "onCharAdded");
+        }
+        private void comboBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (!initial)
+            changedSettings();
+            Settings.Autocomplete["activationKey"] = (Keys)Enum.Parse(typeof(Keys), comboBox1.Text);
+        }
+
+        private void setBooleanicPicturebox(PictureBox p,string property)
+        {
+            
+            p.BackColor = (bool)Settings.Autocomplete[property] ? Color.Teal : Color.Gray;
+        }
+
+
+
+
+
+
+
+        #endregion
+
+
     }
 }

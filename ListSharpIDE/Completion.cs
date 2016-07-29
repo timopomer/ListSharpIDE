@@ -12,6 +12,7 @@ namespace ListSharpIDE
         public static Dictionary<String, Dictionary<String, Tuple<String, String[]>>> wikiDictionary = new Dictionary<String, Dictionary<String, Tuple<String, String[]>>>();
         public static string[] logicWords = new string[] { "TO", "SPLIT", "BY", "FROM", "IN", "WITH", "AS" , "WHERE" , "AND", "ANY", "EVERY", "LENGTH", "IN" };
         public static string[] comparators = new string[] { "IS", "ISNOT", "ISUNDER", "ISOVER", "ISEQUAL", "CONTAINS", "CONTAINSNOT" };
+
         //public static string[] comparators = new string[] { "ANY", "EVERY", "LENGTH", "IN", "STRG", "ROWS", "NUMB", "IS", "ISNOT", "ISUNDER", "ISOVER", "ISEQUAL", "CONTAINS", "CONTAINSNOT" };
         public static Func<Dictionary<String, Tuple<String, String[]>>,String> getDictionaryNameEntries = input => String.Join(" ", input.Select(n => n.Key));
 
@@ -41,7 +42,7 @@ namespace ListSharpIDE
         }
         public static void createDictionaries()
         {
-            new List<String>() { "combinedFunctions", "strgFunctions", "rowsFunctions", "specialFunctions", "launchargs", "conditionals", "constants" }
+            new List<String>() { "combinedFunctions", "strgFunctions", "rowsFunctions", "specialFunctions", "launchargs", "conditionals", "constants" ,"variableInitializers"}
             .ForEach(n => wikiDictionary.Add(n, new Dictionary<String, Tuple<String, String[]>>()));
         }
         public static void resetDictionaries()

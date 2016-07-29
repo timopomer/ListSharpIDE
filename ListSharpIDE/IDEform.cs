@@ -38,20 +38,9 @@ namespace ListSharpIDE
             this.Text = "ListSharp IDE:" + workingEnviroment.activeFilePath;
         }
 
-
         private void Form1_Load(object sender, EventArgs e)
         {
-            /*
-            scintilla1.Height = 700 - 220;
-            label3.Height = 700 - 220;
-            richTextBox1.Width = 1000;
-            richTextBox2.Width = 1000;
-            scintilla1.Width = 947;
 
-            richTextBox1.Location = new Point(0, 40 + 700 - 220);
-            richTextBox2.Location = new Point(0, 95 + 700 - 220);
-            pictureBox4.Location = new Point(1000-100-27, 7);
-            */
             updateElementLocations();
             scintilla1.Margins[1].Width = 0;
             
@@ -61,10 +50,12 @@ namespace ListSharpIDE
             
 
         }
+
         private void Form1_Resize(object sender, EventArgs e)
         {
             updateElementLocations();
         }
+
         public void updateElementLocations()
         {
             scintilla1.Width = this.Size.Width;
@@ -77,10 +68,12 @@ namespace ListSharpIDE
             richTextBox2.Width = this.Size.Width;
             pictureBox4.Location = new Point(this.Size.Width - 100 - 27, 7);
         }
+
         private void scintilla1_TextChanged(object sender, EventArgs e)
         {
             saved = false;
             updateWorkingVariables();
+            
 
 
         }
@@ -89,6 +82,12 @@ namespace ListSharpIDE
         {
 
 
+            if (e.KeyCode == (Keys)Settings.Autocomplete["activationKey"])
+            {
+                workingEnviroment.recursivelyInserting = false;
+                showAutoComplete();
+            }
+                
         }
 
         private void scintilla1_Click(object sender, EventArgs e)
@@ -96,60 +95,35 @@ namespace ListSharpIDE
 
         }
 
-
         private void scintilla1_CharAdded(object sender, CharAddedEventArgs e)
         {
-            showAutoComplete();
+            if ((bool)Settings.Autocomplete["onCharAdded"])
+            if (!workingEnviroment.recursivelyInserting)
+            {
+                string currentLine = scintilla1.Lines[scintilla1.CurrentLine].Text;
+                currentLine = Regex.Replace(currentLine, "\r\n", "");
+                if (currentLine!="")
+                showAutoComplete();
+            }
+                
         }
 
         public void updateWorkingVariables()
         {
-            workingEnviroment.numbVars = scintilla1.Lines.Where(n => n.Text.StartsWith("NUMB")).Select(m => new Regex("NUMB (.*?)=").Match(m.Text).Groups[1].Value.Trim()).Where(k => k != "").Distinct().ToArray();
-            workingEnviroment.strgVars = scintilla1.Lines.Where(n => n.Text.StartsWith("STRG")).Select(m => new Regex("STRG (.*?)=").Match(m.Text).Groups[1].Value.Trim()).Where(k => k != "").Distinct().ToArray();
-            workingEnviroment.rowsVars = scintilla1.Lines.Where(n => n.Text.StartsWith("ROWS")).Select(m => new Regex("ROWS (.*?)=").Match(m.Text).Groups[1].Value.Trim()).Where(k => k != "").Distinct().ToArray();
-        }
-
-
-
-        public KeyValuePair<String, Tuple<String, String[]>> getRightEntry(string currentLine)
-        {
-            foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.combineDictionaries("specialFunctions", "launchargs"))
-            {
-                if (isRightKey(currentLine, kvp))
-                    return kvp;
-            }
-
-            if (currentLine.StartsWith("["))
-                foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.wikiDictionary["conditionals"])
-                {
-                    if (isRightKey(currentLine.Substring(1), kvp))
-                        return kvp;
-                }
-
-            if (currentLine.Contains("="))
-            { 
-                currentLine = currentLine.Split('=')[1].Trim();
-                foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.combineDictionaries("combinedFunctions", "strgFunctions", "rowsFunctions"))
-                {
-                    if (isRightKey(currentLine, kvp))
-                        return kvp;
-                }
-            }
-            return new KeyValuePair<string, Tuple<string, string[]>>("empty",new Tuple<string, string[]>("empty", new string[] { "empty" }));
+            workingEnviroment.numbVars = scintilla1.Lines.Where(n => n.Text.StartsWith("NUMB")).Select(m => new Regex("NUMB (.*?)=").Match(m.Text).Groups[1].Value.Trim()).Where(k => k != "" && !k.StartsWith("(")).Distinct().ToArray();
+            workingEnviroment.strgVars = scintilla1.Lines.Where(n => n.Text.StartsWith("STRG")).Select(m => new Regex("STRG (.*?)=").Match(m.Text).Groups[1].Value.Trim()).Where(k => k != "" && !k.StartsWith("(")).Distinct().ToArray();
+            workingEnviroment.rowsVars = scintilla1.Lines.Where(n => n.Text.StartsWith("ROWS")).Select(m => new Regex("ROWS (.*?)=").Match(m.Text).Groups[1].Value.Trim()).Where(k => k != "" && !k.StartsWith("(")).Distinct().ToArray();
         }
 
         public void processWiki()
         {
-            string currentLine = scintilla1.Lines[scintilla1.CurrentLine].Text;
-            KeyValuePair<String, Tuple<String, String[]>> kvp = getRightEntry(currentLine);
+
+            KeyValuePair<String, Tuple<String, String[]>> kvp = getRightEntry();
             if (kvp.Key == "empty")
                 return;
             showWiki(kvp);
         }
-        public bool isRightKey(string line,KeyValuePair<String, Tuple<String, String[]>> kvp)
-        {
-            return line.StartsWith(kvp.Key);
-        }
+
         public void showWiki(KeyValuePair<String, Tuple<String, String[]>> kvp)
         {
             if (richTextBox1.Text != kvp.Key)
@@ -161,6 +135,8 @@ namespace ListSharpIDE
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            //label2.Text = workingEnviroment.recursivelyInserting.ToString();
+            label2.Text = scintilla1.Lines[scintilla1.CurrentLine].Text;
             if (scintilla1.Zoom > 6)
                 scintilla1.Zoom = 6;
             if (scintilla1.Zoom < -6)
@@ -204,14 +180,11 @@ namespace ListSharpIDE
             label3.ForeColor = Settings.Highlighting["lineColor"];
             updateLineNums();
         }
+
         public void updateLineNums()
         {
             label3.Text = String.Join(Environment.NewLine, Enumerable.Range(scintilla1.FirstVisibleLine, scintilla1.FirstVisibleLine + 500));
         }
-
-
-
-
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
@@ -251,30 +224,118 @@ namespace ListSharpIDE
 
         private void timer2_Tick(object sender, EventArgs e)
         {
+            //ToolTip toolTip1 = new ToolTip();
+
+            //toolTip1.Show(scintilla1.Lines[scintilla1.CurrentLine].Text, scintilla1); // Message of the toolTip and to what control to appear.
+
             processWiki();
         }
+
+        public bool isRightKey(string line, KeyValuePair<String, Tuple<String, String[]>> kvp)
+        {
+            return line.StartsWith(kvp.Key);
+        }
+
         private void scintilla1_AutoCCompleted(object sender, AutoCSelectionEventArgs e)
         {
             if (workingEnviroment.recursivelyInserting)
             {
                 recursionChecks();
             }
+            /*
+            if (!workingEnviroment.recursivelyInserting)
+                showAutoComplete();
+                */
         }
+
+
         private void scintilla1_AutoCSelection(object sender, AutoCSelectionEventArgs e)
         {
             workingEnviroment.beforeInsertion = true;
         }
 
+        public KeyValuePair<String, Tuple<String, String[]>> getRightEntry()
+        {
+
+            string currentLine = scintilla1.Lines[scintilla1.CurrentLine].Text;
+            currentLine = Regex.Replace(currentLine, "\r\n", "");
+            if (currentLine == "")
+            {
+                    return new KeyValuePair<string, Tuple<string, string[]>>("emptyline", new Tuple<string, string[]>("emptyline", Completion.combineDictionaries("variableInitializers", "specialFunctions", "launchargs").SelectMany(n => n.Value.Item2).ToArray()));
+
+
+            }
+
+
+            
+            if (!currentLine.Contains("="))
+                foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.combineDictionaries("variableInitializers","specialFunctions"))
+                {
+                    if (kvp.Key == currentLine)
+                        return kvp;
+                }
+            
+            if (currentLine.StartsWith("#"))
+            {
+                foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.wikiDictionary["launchargs"])
+                {
+                    if (isRightKey(currentLine, kvp))
+                        return kvp;
+                }
+                return new KeyValuePair<string, Tuple<string, string[]>>("launchargs", new Tuple<string, string[]>("launchargs", Completion.wikiDictionary["launchargs"].SelectMany(n => n.Value.Item2.Select(m=>m.Substring(1))).ToArray()));
+            }
+
+
+            if (currentLine.StartsWith("["))
+                foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.wikiDictionary["conditionals"])
+                {
+                    if (isRightKey(currentLine.Substring(1), kvp))
+                        return kvp;
+                }
+
+            if (currentLine.Contains("="))
+            {
+                string[] currentLineSplit = currentLine.Split('=').Select(n=>n.Trim()).ToArray();
+                foreach (KeyValuePair<String, Tuple<String, String[]>> kvp in Completion.combineDictionaries("combinedFunctions", "strgFunctions", "rowsFunctions"))
+                {
+                    if (currentLineSplit[1] == kvp.Key)
+                        return kvp;
+                }
+                
+                if (currentLineSplit[1]=="")
+                {
+
+                    if (currentLineSplit[0].StartsWith("STRG"))
+                        return new KeyValuePair<string, Tuple<string, string[]>>("strgcmds", new Tuple<string, string[]>("strgcmds", Completion.wikiDictionary["strgFunctions"].Select(n => n.Key).ToArray()));
+
+                    if (currentLineSplit[0].StartsWith("ROWS"))
+                        return new KeyValuePair<string, Tuple<string, string[]>>("rowscmds", new Tuple<string, string[]>("rowscmds", Completion.wikiDictionary["rowsFunctions"].Select(n => n.Key).ToArray()));
+                    /*
+                    if (currentLineSplit[0].StartsWith("NUM"))
+                        return new KeyValuePair<string, Tuple<string, string[]>>("numbcmds", new Tuple<string, string[]>("numbcmds", Completion.wikiDictionary["strgFunctions"].Select(n => n.Key).ToArray()));
+                    
+                    number functions dont exist
+                    */
+                }
+                
+
+            }
+            return new KeyValuePair<string, Tuple<string, string[]>>("empty", new Tuple<string, string[]>("empty", new string[] { "empty" }));
+        }
+
         public void showAutoComplete()
         {
-            string currentLine = scintilla1.Lines[scintilla1.CurrentLine].Text;
-            KeyValuePair<String, Tuple<String, String[]>> kvp = getRightEntry(currentLine);
+            if (!(bool)Settings.Autocomplete["isEnabled"])
+                return;
+
+            KeyValuePair<String, Tuple<String, String[]>> kvp = getRightEntry();
 
             if (kvp.Key == "empty")
                 return;
             displaySuggestions(kvp.Value.Item2);
 
         }
+
         public void displaySuggestions(string[] suggestions)
         {
             var currentPos = scintilla1.CurrentPosition;
@@ -298,6 +359,7 @@ namespace ListSharpIDE
             }
             workingEnviroment.beforeInsertion = false;
         }
+
         public static IEnumerable<String[]> CombineBy(string[] values, Func<string, bool> predicate)
         {
             var result = new List<string[]>();
@@ -336,32 +398,24 @@ namespace ListSharpIDE
 
         public void recursiveAutoC()
         {
-
             if (workingEnviroment.toInsertQuery[0].StartsWith("("))
-            {
-                
+            {   
                 string[] items = new Regex("\\((.*?)\\)").Match(workingEnviroment.toInsertQuery[0]).Groups[1].Value.Split('|');
                 items = items.SelectMany(n => n == "ROWS" ? workingEnviroment.rowsVars : n == "STRG" ? workingEnviroment.strgVars : n == "NUMB" ? workingEnviroment.numbVars : n == "VAR" ? workingEnviroment.strgVars.Concat(workingEnviroment.rowsVars.Concat(workingEnviroment.numbVars)) : new string[] { n }).ToArray();
                 displaySuggestions(items);
-
             }
             else
             {
-
                 scintilla1.InsertText(scintilla1.CurrentPosition,workingEnviroment.toInsertQuery[0]);
                 scintilla1.CurrentPosition += workingEnviroment.toInsertQuery[0].Length;
                 scintilla1.SelectionStart = scintilla1.SelectionEnd;
                 recursionChecks();
-
             }
-
-
-
-
         }
 
         private void checkQueryToBeInserted_Tick(object sender, EventArgs e)
         {
+            //if ()
             if (workingEnviroment.toInsertQuery?.Length > 0 && !workingEnviroment.recursivelyInserting)
             {
                 workingEnviroment.recursivelyInserting = true;
@@ -377,6 +431,11 @@ namespace ListSharpIDE
                 recursiveAutoC();
             else
                 workingEnviroment.recursivelyInserting = false;
+        }
+
+        private void autoCompleteTimer_Tick(object sender, EventArgs e)
+        {
+            
         }
     }
 }

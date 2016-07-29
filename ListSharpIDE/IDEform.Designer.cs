@@ -42,6 +42,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.wikiDisplayTimer = new System.Windows.Forms.Timer(this.components);
             this.checkQueryToBeInserted = new System.Windows.Forms.Timer(this.components);
+            this.label2 = new System.Windows.Forms.Label();
+            this.autoCompleteTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -179,12 +181,30 @@
             this.checkQueryToBeInserted.Interval = 1;
             this.checkQueryToBeInserted.Tick += new System.EventHandler(this.checkQueryToBeInserted_Tick);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label2.Location = new System.Drawing.Point(451, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 20);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "label2";
+            // 
+            // autoCompleteTimer
+            // 
+            this.autoCompleteTimer.Enabled = true;
+            this.autoCompleteTimer.Interval = 10;
+            this.autoCompleteTimer.Tick += new System.EventHandler(this.autoCompleteTimer_Tick);
+            // 
             // IDEform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(62)))), ((int)(((byte)(80)))));
             this.ClientSize = new System.Drawing.Size(984, 661);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.richTextBox1);
@@ -223,6 +243,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer wikiDisplayTimer;
         private System.Windows.Forms.Timer checkQueryToBeInserted;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Timer autoCompleteTimer;
     }
 }
 

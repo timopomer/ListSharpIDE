@@ -54,6 +54,8 @@ namespace ListSharpIDE
             }
             foreach (KeyValuePair<String, Dictionary<String, Tuple<String, String[]>>> differentWikis in Completion.wikiDictionary)
             {
+                if (differentWikis.Key == "variableInitializers")
+                    continue;
                 string singlefile = File.ReadAllText(wikiPath + "\\" + differentWikis.Key + ".txt");
                 string[] wikiArr = Regex.Split(singlefile, "\r\n---\r\n", RegexOptions.Singleline);
                 foreach (string singleWiki in wikiArr)
@@ -64,8 +66,15 @@ namespace ListSharpIDE
                 
             }
 
-        }
+            addvariableInitializers();
 
+        }
+        public static void addvariableInitializers()
+        {
+            Completion.wikiDictionary["variableInitializers"].Add("STRG", new Tuple<string, string[]>("Store raw text", new string[] { "STRG (STRG) = " }));
+            Completion.wikiDictionary["variableInitializers"].Add("ROWS", new Tuple<string, string[]>("Store multiple rows of STRG's", new string[] { "ROWS (ROWS) = " }));
+            Completion.wikiDictionary["variableInitializers"].Add("NUMB", new Tuple<string, string[]>("Store numbers", new string[] { "NUMB (NUMB) = " }));
+        }
         public static void saveWiki()
         {
             string path = Environment.CurrentDirectory + @"\wikiDocs";

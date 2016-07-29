@@ -15,6 +15,8 @@ namespace ListSharpIDE
     public static class Settings
     {
         public static string configPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\configuration.ini";
+
+        public static Dictionary<string, object> Autocomplete = new Dictionary<string, object>();
         public static Dictionary<string,Color> Highlighting = new Dictionary<string, Color>();
         public static string[] colorProperties = new string[] { "defaultColor",
                                                                 "commentColor",
@@ -43,8 +45,13 @@ namespace ListSharpIDE
         }
         public static void Initialize()
         {
+            Autocomplete.Add("isEnabled", true);
+            Autocomplete.Add("onCharAdded", true);
+            Autocomplete.Add("activationKey", Keys.F1);
             foreach (string colorProp in colorProperties)
             Highlighting.Add(colorProp, new Color());
+
+
         }
 
         public static void saveSettings()
@@ -55,6 +62,8 @@ namespace ListSharpIDE
             foreach (string colorProp in colorProperties)
             toWrite.Add(colorProp + "=" + Highlighting[colorProp].toRaw());
             toWrite.Add("[Autocomplete]");
+            foreach (KeyValuePair<string, object> kvp in Autocomplete)
+                toWrite.Add(kvp.Key + "=" + kvp.Value);
             toWrite.Add("[Versions]");
             toWrite.Add("[Wiki]");
             toWrite.Add("[About]");
@@ -78,8 +87,20 @@ namespace ListSharpIDE
             foreach (string colorProp in colorProperties)
             Highlighting[colorProp] = loadColor(colorProp);
 
-
+            Autocomplete["isEnabled"] = loadBoolean("isEnabled");
+            Autocomplete["onCharAdded"] = loadBoolean("onCharAdded");
+            Autocomplete["activationKey"] = loadKeycode("activationKey");
         }
+        public static Keys loadKeycode(string keyName)
+        {
+            return (Keys)Enum.Parse(typeof(Keys),returnProperty(keyName));
+        }
+
+        public static bool loadBoolean(string boolName)
+        {
+            return returnProperty(boolName) == "True" ? true : false;
+        }
+
         public static Color loadColor(string colorName)
         {
             string colorString = returnProperty(colorName);
