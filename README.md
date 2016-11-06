@@ -24,3 +24,6 @@ This IDE is meant to be a convinient enviroment for the development of [ListShar
 * Code snipplets
 * Version control for different ListSharp builds
 * Debugging helper
+
+### Associates .ls files
+![File Association](http://puu.sh/lSDir/5497c7ae40.png)
